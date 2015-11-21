@@ -8,10 +8,8 @@ import java.awt.Graphics;
 import java.awt.Panel;
 import java.awt.Image;
 import java.awt.image.VolatileImage;
-
 import java.io.IOException;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 public class Toaster extends Panel {
@@ -45,7 +43,6 @@ public class Toaster extends Panel {
                     try {
                         Thread.sleep(55);
                     } catch (Exception e) {}
-                    //System.out.print(".");
                     Toaster toaster = Toaster.this;
                     if (toaster != null) {
                         if (toaster.animationState == 2)
@@ -101,10 +98,6 @@ public class Toaster extends Panel {
         calculateToasts();
         int w = getWidth();
         int h = getHeight();
-        //if ((this.render == null) || (this.render.getWidth() != w) || (this.render.getHeight() != h)) {
-            //this.render = createVolatileImage(w, h);
-        //}
-        //Graphics g = this.render.getGraphics();
         double scaleFactor = (double)h / 480 * 3;
         int toasterWidth  = (int) (scaleFactor * (this.toasterFront.getWidth(null) / 4));
         int toasterHeight = (int) (scaleFactor * (this.toasterFront.getHeight(null) / 4));

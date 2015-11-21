@@ -44,7 +44,6 @@ import joptsimple.OptionSpec;
 import net.minecraft.bootstrap.Downloader;
 import net.minecraft.bootstrap.FatalBootstrapError;
 import net.minecraft.bootstrap.Util;
-//import net.minecraft.hopper.HopperService;
 import java.text.SimpleDateFormat;
 
 public class Bootstrap extends Frame {
@@ -56,8 +55,6 @@ public class Bootstrap extends Frame {
    private final File launcherJar;
    private final File packedLauncherJar;
    private final File packedLauncherJarNew;
-   //private final JTextArea textArea;
-   //private final JScrollPane scrollPane;
    private final PasswordAuthentication proxyAuth;
    private final String[] remainderArgs;
    private final StringBuilder outputBuffer = new StringBuilder();
@@ -73,45 +70,29 @@ public class Bootstrap extends Frame {
       this.packedLauncherJar = new File(workDir, "launcher.pack.lzma");
       this.packedLauncherJarNew = new File(workDir, "launcher.pack.lzma.new");
       this.setSize(854, 480);
-      //this.setDefaultCloseOperation(3);
       this.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent arg0) {
-                new Thread() {
-                    public void run() {
-                        try {
-                            Thread.sleep(5000L);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        System.out.println("FORCING EXIT!");
-                        System.exit(0);
-                    }
-                }.start();
-
-                //if (LauncherFrame.this.launcher != null) {
-                //    LauncherFrame.this.launcher.stop();
-                //    LauncherFrame.this.launcher.destroy();
-                //}
-                System.exit(0);
-            }
-        });
+          public void windowClosing(WindowEvent arg0) {
+              new Thread() {
+                  public void run() {
+                      try {
+                          Thread.sleep(5000L);
+                      } catch (InterruptedException e) {
+                          e.printStackTrace();
+                      }
+                      System.out.println("FORCING EXIT!");
+                      System.exit(0);
+                  }
+              }.start();
+              System.exit(0);
+          }
+      });
       this.setBackground(new Color(102, 0, 0));
       this.toaster = new Toaster(this);
       this.add(this.toaster);
-      //this.textArea = new JTextArea();
-      //this.textArea.setLineWrap(true);
-      //this.textArea.setEditable(false);
-      //this.textArea.setFont(MONOSPACED);
-      //((DefaultCaret)this.textArea.getCaret()).setUpdatePolicy(1);
-      //this.scrollPane = new JScrollPane(this.textArea);
-      //this.scrollPane.setBorder((Border)null);
-      //this.scrollPane.setVerticalScrollBarPolicy(22);
-      //this.add(this.scrollPane);
       this.setLocationRelativeTo((Component)null);
       this.setVisible(true);
       this.print("\n== 2Toasty Bootstrap v5.1 ==\n\n");
       this.print("time : " + sdf.format(new Date()) + "\n");
-      //this.print("time : " + DateFormat.getDateTimeInstance(2, 2, Locale.US).format(new Date()) + "\n");
       this.print("os   : " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch") + "\n");
       this.print("java : " + System.getProperty("java.vm.name") + " " + System.getProperty("java.version") + " " + System.getProperty("sun.arch.data.model") + "\n\n");
    }
@@ -124,10 +105,8 @@ public class Bootstrap extends Frame {
 
       Downloader.Controller controller = new Downloader.Controller();
       if(!force && this.packedLauncherJar.exists()) {
-         //String md51 = this.getMd5(this.packedLauncherJar);
          String httpDate = this.getHttpDate(this.packedLauncherJar);
-         //this.println("HTTP Date : " + httpDate);
-         Thread thread = new Thread(new Downloader(controller, this, this.proxy, /*md51*/ httpDate, this.packedLauncherJarNew));
+         Thread thread = new Thread(new Downloader(controller, this, this.proxy, httpDate, this.packedLauncherJarNew));
          thread.setName("Launcher downloader");
          thread.start();
 
@@ -213,7 +192,6 @@ public class Bootstrap extends Frame {
             ;
          }
       }
-
    }
 
    private File getUnpackedLzmaFile(File packedLauncherJar) {
@@ -262,31 +240,12 @@ public class Bootstrap extends Frame {
    public void print(String string) {
       System.out.print(string);
       this.outputBuffer.append(string);
-      //Document document = this.textArea.getDocument();
-      //final JScrollBar scrollBar = this.scrollPane.getVerticalScrollBar();
-      //boolean shouldScroll = (double)scrollBar.getValue() + scrollBar.getSize().getHeight() + (double)(MONOSPACED.getSize() * 2) > (double)scrollBar.getMaximum();
-
-      //try {
-      //   document.insertString(document.getLength(), string, (AttributeSet)null);
-      //} catch (BadLocationException var6) {
-      //   ;
-      //}
-
-      //if(shouldScroll) {
-      //   SwingUtilities.invokeLater(new Runnable() {
-      //      public void run() {
-      //         scrollBar.setValue(Integer.MAX_VALUE);
-      //      }
-      //   });
-      //}
-
    }
 
    public void startLauncher(File launcherJar) {
       this.println("Starting launcher.");
 
       try {
-         //Class e = (new URLClassLoader(new URL[]{launcherJar.toURI().toURL()})).loadClass("net.minecraft.launcher.Launcher");
          Class e = (new URLClassLoader(new URL[]{launcherJar.toURI().toURL()})).loadClass("net.minecraft.LauncherFrame");
          Constructor constructor = e.getConstructor(new Class[]{Frame.class, File.class, Proxy.class, PasswordAuthentication.class, String[].class, Integer.class});
          constructor.newInstance(new Object[]{this, this.workDir, this.proxy, this.proxyAuth, this.remainderArgs, Integer.valueOf(5)});
@@ -327,7 +286,6 @@ public class Bootstrap extends Frame {
                }
             }
          }
-
       }
    }
 
@@ -425,16 +383,9 @@ public class Bootstrap extends Frame {
                report.append(stracktrace).append("\n\n-- Head --\nStacktrace:\n").append(stracktrace).append("\n\n").append(frame.outputBuffer);
                report.append("\tMinecraft.Bootstrap Version: 5");
 
-               //try {
-               //   HopperService.submitReport(proxy, report.toString(), "Minecraft.Bootstrap", "5");
-               //} catch (Throwable var23) {
-               //   ;
-               //}
-
                frame.println("FATAL ERROR: " + stracktrace.toString());
                frame.println("\nPlease fix the error and restart.");
             }
-
          }
       }
    }

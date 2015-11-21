@@ -33,9 +33,7 @@ public class Util {
       return workingDirectory;
    }
 
-   // $FF: synthetic class
    static class SyntheticClass_1 {
-      // $FF: synthetic field
       static final int[] $SwitchMap$net$minecraft$bootstrap$Util$OS = new int[Util.OS.values().length];
 
       static {
