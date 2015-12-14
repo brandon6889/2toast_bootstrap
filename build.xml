@@ -11,6 +11,7 @@
     <tstamp/>
     <delete dir="${build}"/>
     <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
   </target>
 
   <target name="compile" depends="init" description="Compile the source">
