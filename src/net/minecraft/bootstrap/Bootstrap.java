@@ -87,7 +87,7 @@ public class Bootstrap extends Frame {
           }
       });
       this.setBackground(new Color(102, 0, 0));
-      this.toaster = new Toaster(this);
+      this.toaster = new Toaster();
       this.add(this.toaster);
       this.setLocationRelativeTo((Component)null);
       this.setVisible(true);
@@ -137,9 +137,9 @@ public class Bootstrap extends Frame {
       this.toaster.message = "Extracting";
 
       this.unpack();
-      this.toaster.animationState = 1;
+      this.toaster.setAnimationState(1);
       this.toaster.message = "Launching";
-      synchronized(this.toaster.message) {
+      synchronized (this.toaster.message) {
           try { this.toaster.message.wait(); } catch (Exception e) {}
       }
       this.startLauncher(this.launcherJar);

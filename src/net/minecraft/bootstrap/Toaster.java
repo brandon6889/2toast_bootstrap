@@ -13,7 +13,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class Toaster extends Panel {
-    protected final Frame bootstrap;
     private VolatileImage render;
     private Image toasterBack;
     private Image toasterMiddle;
@@ -22,11 +21,10 @@ public class Toaster extends Panel {
     private int toast1delta = 0, toast2delta = 0, toast1pos = 0,toast2pos = 0;
     private Random random = new Random();
     private Thread t;
-    protected int animationState = 0;
+    private int animationState = 0;
     protected String message = "Downloading";
     
-    public Toaster(Frame bootstrapFrame) {
-        this.bootstrap = bootstrapFrame;
+    public Toaster() {
         try {
             this.toasterBack = ImageIO.read(Toaster.class.getResource("toaster_back.png"));
             this.toasterMiddle = ImageIO.read(Toaster.class.getResource("toaster_middle.png"));
@@ -56,6 +54,10 @@ public class Toaster extends Panel {
         t.start();
     }
     
+    protected void setAnimationState(int i) {
+        animationState = i;
+    }
+    
     private void calculateToasts() {
         switch (animationState) {
         case 0:
@@ -73,8 +75,7 @@ public class Toaster extends Panel {
         case 1:
             if (toast1pos == 0 && toast2pos == 0) {
                 animationState = 2;
-                try { Thread.sleep(200); } catch (Exception e) {}
-                synchronized(message) {
+                synchronized (message) {
                     message.notify();
                 }
             }
