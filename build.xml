@@ -9,6 +9,7 @@
 
   <target name="init">
     <tstamp/>
+    <delete dir="${build}"/>
     <mkdir dir="${build}"/>
   </target>
 
