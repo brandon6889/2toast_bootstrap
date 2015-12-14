@@ -6,6 +6,7 @@
   <property name="build" location="bin"/>
   <property name="dist" location="dist"/>
   <property name="lib" location="lib"/>
+  <property name="obfclass" location="obf"/>
 
   <target name="init">
     <tstamp/>
@@ -20,8 +21,14 @@
     </javac>
   </target>
 
-  <target name="dist" depends="compile" description="Generate the dist files">
-    <jar jarfile="${dist}/2toast-bootstrap-${DSTAMP}.jar" basedir="${build}">
+  <target name="obfuscate" depends="compile" description="Obfuscate class files">
+    <delete dir="${obfclass}"/>
+    <taskdef resource="proguard/ant/task.properties" classpath="util/proguard.jar"/>
+    <proguard configuration="conf.proguard"/>
+  </target>
+
+  <target name="dist" depends="obfuscate" description="Generate the dist files">
+    <jar jarfile="${dist}/2toast-bootstrap-${DSTAMP}.jar" basedir="${obfclass}">
       <manifest>
         <attribute name="Main-Class" value="net.minecraft.bootstrap.Bootstrap"/>
       </manifest>
