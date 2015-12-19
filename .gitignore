@@ -1,3 +1,5 @@
 bin/*
 dist/*
+obf/*
+mapping.proguard
 !.gitignore
