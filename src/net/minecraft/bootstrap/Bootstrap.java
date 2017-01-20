@@ -46,6 +46,8 @@ import net.minecraft.bootstrap.FatalBootstrapError;
 import net.minecraft.bootstrap.Util;
 import java.text.SimpleDateFormat;
 
+import javax.swing.JOptionPane;
+
 public class Bootstrap extends Frame {
    private static final Font MONOSPACED = new Font("Monospaced", 0, 12);
    public static final String LAUNCHER_URL = "http://2toast.net/minecraft/launcher/launcher.pack.lzma"; //change to HTTPS
@@ -91,7 +93,7 @@ public class Bootstrap extends Frame {
       this.add(this.toaster);
       this.setLocationRelativeTo((Component)null);
       this.setVisible(true);
-      this.print("\n== 2Toasty Bootstrap v5.1 ==\n\n");
+      this.print("\n== 2Toasty Bootstrap v1.1 ==\n\n");
       this.print("time : " + sdf.format(new Date()) + "\n");
       this.print("os   : " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch") + "\n");
       this.print("java : " + System.getProperty("java.vm.name") + " " + System.getProperty("java.version") + " " + System.getProperty("sun.arch.data.model") + "\n\n");
@@ -315,6 +317,10 @@ public class Bootstrap extends Frame {
    }
 
    public static void main(String[] args) throws IOException {
+      if (System.getProperty("java.specification.version").equals("1.6") || System.getProperty("java.specification.version").equals("1.7")) {
+         JOptionPane.showMessageDialog(null, "Java 7 and lower not supported. Please update to latest Java 8 64-bit.", "2Toast Launcher", JOptionPane.INFORMATION_MESSAGE);
+         System.exit(2);
+      }
       System.setProperty("java.net.preferIPv4Stack", "true");
       sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
       OptionParser optionParser = new OptionParser();
