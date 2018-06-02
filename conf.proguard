@@ -1,7 +1,7 @@
 -injars bin
 -outjars obf
 
--libraryjars /usr/lib64/jvm/java-1.8.0-openjdk-1.8.0/jre/lib/rt.jar
+-libraryjars  <java.home>/lib/rt.jar
 -libraryjars libsrc
 
 -dontskipnonpubliclibraryclassmembers

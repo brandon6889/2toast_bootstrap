@@ -16,7 +16,7 @@
   </target>
 
   <target name="compile" depends="init" description="Compile the source">
-    <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+    <javac target="1.8" source="1.8" srcdir="${src}" destdir="${build}" includeantruntime="false">
       <classpath path="libsrc"/>
     </javac>
   </target>
