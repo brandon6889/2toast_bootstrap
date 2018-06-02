@@ -89,7 +89,7 @@ public final class Bootstrap extends Frame {
       this.add(this.toaster);
       this.setLocationRelativeTo((Component)null);
       this.setVisible(true);
-      this.print("\n== 2Toasty Bootstrap v1.1 ==\n\n");
+      this.print("\n== 2Toasty Bootstrap v1.2 ==\n\n");
       this.print("time : " + sdf.format(new Date()) + "\n");
       this.print("os   : " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch") + "\n");
       this.print("java : " + System.getProperty("java.vm.name") + " " + System.getProperty("java.version") + " " + System.getProperty("sun.arch.data.model") + "\n\n");
