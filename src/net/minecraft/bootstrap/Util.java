@@ -19,7 +19,7 @@ public class Util {
          workingDirectory = new File(userHome, "."+APPLICATION_NAME+"/");
          break;
       case 3:
-         String applicationData = System.getenv("APPDATA");
+         String applicationData = System.getenv("LOCALAPPDATA");
          String folder = applicationData != null?applicationData:userHome;
          workingDirectory = new File(folder, "."+APPLICATION_NAME+"/");
          break;
@@ -65,10 +65,10 @@ public class Util {
    }
 
    public static enum OS {
+      LINUX,
+      SOLARIS,
       WINDOWS,
       MACOS,
-      SOLARIS,
-      LINUX,
       UNKNOWN;
    }
 }
