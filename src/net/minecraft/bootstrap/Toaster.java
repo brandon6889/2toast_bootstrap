@@ -3,7 +3,6 @@ package net.minecraft.bootstrap;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Panel;
 import java.awt.Image;
@@ -20,7 +19,7 @@ public class Toaster extends Panel {
     private Image toast;
     private int toast1delta = 0, toast2delta = 0, toast1pos = 0,toast2pos = 0;
     private Random random = new Random();
-    private Thread t;
+    private final Thread t;
     private int animationState = 0;
     protected String message = "Downloading";
     
@@ -40,7 +39,7 @@ public class Toaster extends Panel {
                 while (!b) {
                     try {
                         Thread.sleep(55);
-                    } catch (Exception e) {}
+                    } catch (InterruptedException e) {}
                     Toaster toaster = Toaster.this;
                     if (toaster != null) {
                         if (toaster.animationState == 2)
@@ -51,6 +50,9 @@ public class Toaster extends Panel {
                 }
             }
         };
+    }
+    
+    protected void startThread() {
         t.start();
     }
     
@@ -75,8 +77,8 @@ public class Toaster extends Panel {
         case 1:
             if (toast1pos == 0 && toast2pos == 0) {
                 animationState = 2;
-                synchronized (message) {
-                    message.notify();
+                synchronized (this) {
+                    this.notify();
                 }
             }
             if (toast1pos != 0) {
@@ -87,14 +89,15 @@ public class Toaster extends Panel {
                 toast2pos += toast2delta;
                 toast2delta -= 2;
             }
-        default: return;
         }
     }
     
+    @Override
     public void update(Graphics g) {
         paint(g);
     }
     
+    @Override
     public void paint(Graphics g2) {
         calculateToasts();
         int w = getWidth();

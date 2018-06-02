@@ -13,7 +13,6 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLHandshakeException;
-import net.minecraft.bootstrap.Bootstrap;
 import java.net.HttpURLConnection;
 
 public class Downloader implements Runnable {
@@ -22,7 +21,7 @@ public class Downloader implements Runnable {
    private final String currentMd5;
    private final File targetFile;
    private final Downloader.Controller controller;
-   private Bootstrap bootstrap;
+   private final Bootstrap bootstrap;
 
    public Downloader(Downloader.Controller controller, Bootstrap bootstrap, Proxy proxy, String currentMd5, File targetFile) {
       this.controller = controller;
@@ -32,6 +31,7 @@ public class Downloader implements Runnable {
       this.targetFile = targetFile;
    }
 
+   @Override
    public void run() {
       int retries = 0;
 
@@ -43,7 +43,7 @@ public class Downloader implements Runnable {
          }
 
          try {
-            URL e = new URL(this.bootstrap.LAUNCHER_URL);
+            URL e = new URL(Bootstrap.LAUNCHER_URL);
             Object connectionObject = e.openConnection(this.proxy);
             HttpURLConnection connection = (HttpURLConnection)connectionObject;
             //HttpsURLConnection connection = this.getConnection(e);

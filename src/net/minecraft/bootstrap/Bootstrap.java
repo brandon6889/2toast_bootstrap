@@ -3,7 +3,6 @@ package net.minecraft.bootstrap;
 import LZMA.LzmaInputStream;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -27,10 +26,8 @@ import java.net.Proxy.Type;
 import java.nio.channels.FileChannel;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import java.util.jar.JarOutputStream;
@@ -41,15 +38,11 @@ import joptsimple.OptionException;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
-import net.minecraft.bootstrap.Downloader;
-import net.minecraft.bootstrap.FatalBootstrapError;
-import net.minecraft.bootstrap.Util;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JOptionPane;
 
-public class Bootstrap extends Frame {
-   private static final Font MONOSPACED = new Font("Monospaced", 0, 12);
+public final class Bootstrap extends Frame {
    public static final String LAUNCHER_URL = "http://2toast.net/minecraft/launcher/launcher.pack.lzma"; //change to HTTPS
    public static final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
    private final File workDir;
@@ -73,8 +66,10 @@ public class Bootstrap extends Frame {
       this.packedLauncherJarNew = new File(workDir, "launcher.pack.lzma.new");
       this.setSize(854, 480);
       this.addWindowListener(new WindowAdapter() {
+          @Override
           public void windowClosing(WindowEvent arg0) {
               new Thread() {
+                  @Override
                   public void run() {
                       try {
                           Thread.sleep(5000L);
@@ -90,6 +85,7 @@ public class Bootstrap extends Frame {
       });
       this.setBackground(new Color(102, 0, 0));
       this.toaster = new Toaster();
+      this.toaster.startThread();
       this.add(this.toaster);
       this.setLocationRelativeTo((Component)null);
       this.setVisible(true);
@@ -141,8 +137,8 @@ public class Bootstrap extends Frame {
       this.unpack();
       this.toaster.setAnimationState(1);
       this.toaster.message = "Launching";
-      synchronized (this.toaster.message) {
-          try { this.toaster.message.wait(); } catch (Exception e) {}
+      synchronized (this.toaster) {
+          try { this.toaster.wait(); } catch (Exception e) {}
       }
       this.startLauncher(this.launcherJar);
    }
@@ -350,7 +346,7 @@ public class Bootstrap extends Frame {
          Proxy proxy = Proxy.NO_PROXY;
          if(hostName != null) {
             try {
-               proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(hostName, ((Integer)optionSet.valueOf((OptionSpec)proxyPortOption)).intValue()));
+               proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(hostName, ((Integer)optionSet.valueOf((OptionSpec)proxyPortOption))));
             } catch (Exception var25) {
                ;
             }
@@ -362,6 +358,7 @@ public class Bootstrap extends Frame {
          if(!proxy.equals(Proxy.NO_PROXY) && stringHasValue(proxyUser) && stringHasValue(proxyPass)) {
             passwordAuthentication = new PasswordAuthentication(proxyUser, proxyPass.toCharArray());
             Authenticator.setDefault(new Authenticator() {
+               @Override
                protected PasswordAuthentication getPasswordAuthentication() {
                   //return passwordAuthentication;
                   return new PasswordAuthentication(proxyUser, proxyPass.toCharArray());
